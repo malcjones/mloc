@@ -18,7 +18,7 @@ fn count_lines(path: &PathBuf) -> Result<usize, io::Error> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
     let mut count = 0;
-    for (i, line) in reader.lines().enumerate() {
+    for line in reader.lines() {
         if let Ok(line) = line {
             if line.trim().is_empty() || line.trim().starts_with("//") {
                 continue;
@@ -35,7 +35,7 @@ fn count_dir (path: &PathBuf) -> usize {
         let entry = entry.expect("entry failed");
         let path = entry.path();
         if path.is_dir() {
-            count_dir(&path);
+            count += count_dir(&path);
         } else if path.extension().map_or(false, |ext| ext == "rs") {
             let lines = count_lines(&path).expect("count_lines failed");
             println!("  - {}: {}", path.display(), lines);
