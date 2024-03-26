@@ -37,7 +37,9 @@ fn count_dir (path: &PathBuf) -> usize {
         if path.is_dir() {
             count_dir(&path);
         } else if path.extension().map_or(false, |ext| ext == "rs") {
-            count += count_lines(&path).expect("count_lines failed");
+            let lines = count_lines(&path).expect("count_lines failed");
+            println!("{} lines of code in {:?}", lines, path);
+            count += lines;
         }
     }
     count
